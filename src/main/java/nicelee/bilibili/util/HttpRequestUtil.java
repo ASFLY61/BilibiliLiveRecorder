@@ -26,7 +26,7 @@ import nicelee.bilibili.enums.StatusEnum;
 
 public class HttpRequestUtil {
 
-	private static CookieManager defaultManager = new CookieManager();
+	private static CookieManager defaultManager;
 	// 下载缓存区
 	private byte[] buffer;
 	// 下载文件大小状态
@@ -39,25 +39,28 @@ public class HttpRequestUtil {
 	private StatusEnum status = StatusEnum.NONE; // 0 正在下载; 1 下载完毕; -1 出现错误; -2 人工停止;-3 队列中
 	// 下载标志,置False可以停止下载
 	private boolean bDown = true;
-	// Cookie管理
-	CookieManager manager = new CookieManager();
 
 	public HttpRequestUtil() {
-		this.manager = defaultManager;
-		manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-		CookieHandler.setDefault(manager);
 	}
 
 	public HttpRequestUtil(CookieManager manager) {
-		this.manager = manager;
-		manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-		CookieHandler.setDefault(manager);
+		setDefaultCookieManager(manager);
 	}
 
 	public void setSavePath(String savePath) {
 		this.savePath = savePath;
 	}
 
+	static {
+		setDefaultCookieManager(new CookieManager());
+	}
+	
+	public static void setDefaultCookieManager(CookieManager manager) {
+		manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+		defaultManager = manager;
+		CookieHandler.setDefault(manager);
+	}
+	
 	public static CookieManager DefaultCookieManager() {
 		return defaultManager;
 	}
@@ -79,8 +82,8 @@ public class HttpRequestUtil {
 		String urlNameString = url;
 		URL realUrl = new URL(urlNameString);
 		HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
-		conn.setConnectTimeout(2000);
-		conn.setReadTimeout(2000);
+		conn.setConnectTimeout(20000);
+		conn.setReadTimeout(20000);
 		headers.put("range", "bytes=0-100");
 		for (Map.Entry<String, String> entry : headers.entrySet()) {
 			conn.setRequestProperty(entry.getKey(), entry.getValue());
@@ -374,8 +377,8 @@ public class HttpRequestUtil {
 			String urlNameString = url;
 			URL realUrl = new URL(urlNameString);
 			HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
-			conn.setConnectTimeout(2000);
-			conn.setReadTimeout(2000);
+			conn.setConnectTimeout(20000);
+			conn.setReadTimeout(20000);
 			// 设置参数
 			conn.setDoOutput(true); // 需要输出
 			conn.setDoInput(true); // 需要输入
@@ -419,7 +422,7 @@ public class HttpRequestUtil {
 			}
 			// printCookie(manager.getCookieStore());
 		} catch (Exception e) {
-			System.out.println("发送GET请求出现异常！" + e);
+			System.out.println("发送POST请求出现异常！" + e);
 			// e.printStackTrace();
 		} finally {
 			try {

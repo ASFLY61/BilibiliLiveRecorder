@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>top.nicelee</groupId>
 	<artifactId>live-record</artifactId>
-	<version>2.16.0</version>
+	<version>2.30.0</version>
 	<name>iLiveRecord</name>
-	<description>B站、Acfun、斗鱼、虎牙、快手、抖音直播录制</description>
+	<description>B站、Acfun、斗鱼、虎牙、快手、抖音、淘宝直播录制</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -41,9 +41,11 @@
 							<mainClass>nicelee.bilibili.Main</mainClass>
 						</manifest>
 					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+					<!--<descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
+						</descriptorRefs> -->
+					<descriptors>
+						<descriptor>src/assembly/assembly.xml</descriptor>
+					</descriptors>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -57,11 +59,24 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Nashorn was deleted from JDK since JDK 15 -->
+		<dependency>
+			<groupId>org.openjdk.nashorn</groupId>
+			<artifactId>nashorn-core</artifactId>
+			<version>15.4</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20190722</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tencent.yunxiaowei.base</groupId>
+			<artifactId>wup</artifactId>
+			<version>1.0.0-1</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/wup-1.0.0-SNAPSHOT.jar</systemPath>
 		</dependency>
 	</dependencies>
 

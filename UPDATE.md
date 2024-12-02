@@ -1,4 +1,55 @@
 ## 更新  
++ V2.30.0
+    * 修复快手直播
++ V2.29.0
+    * 修复：虎牙：参考[biliup/biliup](https://github.com/biliup/biliup/blob/7c703b936b7a79c134a7af45331d71c32de976a7/biliup/plugins/huya.py#L169)，使用微信小程序的参数。 #134 
++ V2.28.0
+    * 优化：淘宝：兼容可能的json解析错误。
+    * 优化：虎牙：通过java代码来计算md5，而不是js。
+    * 修复：修改虎牙`ctype`、`t`参数，使之不在2分钟时就断开。 #132
++ V2.27.0
+    * 修复：解决JDK15及以上斗鱼不能录制的问题 [#122](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/122)
+    * 修复：修复`huya`开始下载后直接停止的问题 [#124](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/124)
+    * 优化：对`huya2`得到的原始直播流地址换一种处理方式
+    * 修复：修复`douyin`无法解析的问题, 使用移动端页面解析 [#125](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/125)
+    * 优化: 在未配置cookie使用`douyin2`时，尝试打印建议的cookie值
+
++ V2.26.0
+    * 修复：快手直播`liver=kuaishou`
+    * 新增: 淘宝`taobao`解析，并支持输入回放链接提取m3u8下载链接
+    
++ V2.25.0
+    * 修复： 抖音直播`liver=douyin2`
+    * 修复[#113](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/113)： 虎牙从网页里面抠的内容有延迟，主播下播后可能误认为仍在直播。为此，获取直播链接后增加有效性检查。  
+    * 新增[#5](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/5) ： 尝试使用另一种方式获取虎牙直播信息，该方式没有延迟。  `liver=huya2`
++ V2.24.0
+    * 修复[#105](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/105),[#102](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/102) `douyin`正则匹配修复
+    * 修复快手录制
+    * 优化：去除解析器里面的`System.exit`使用
+    
++ V2.23.0
+    * 新增：提供工具实现合并FLV功能，目的是解决分离视频时出现`只有声音`、`分辨率不对`的问题
+    * 新增: [#91](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/91),[#102](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/102), 针对花屏，新增在校验时去掉前`contentFramesToSkip`个内容帧的功能
+    * 优化：首帧时间戳间隔由`30`s固定值改为`maxPeriodBetween2Frame` ms  
+        + 原理：在前10帧里，初始为0，后续如果某帧相比前一帧间隔过大，则选取该帧时间戳作为初始时间戳。
+        
++ V2.22.0
+    * 修复[#93](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/93)、[#96](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/96), 修复一个cookie转换问题，该问题导致cookie中存在字符`|`时会出现错误
++ V2.21.0
+    * 修复[#94](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/94), 修复YY直播
+    * 修复[#93](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/93), 抖音直播新增另一种备用解析方式, 注意`liver=douyin2`, cookie文件名为`douyin2-cookie.txt`
+    * 修复抖音直播传入短链接`https://v.douyin.com/xxxx`的解析方式
+    
++ V2.20.0
+    * 将POST方式查询视频源时的HTTP连接超时时间改为20s
++ V2.19.0
+    * 修复[#87](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/87)：修复虎牙录制
++ V2.18.1
+    * 修复[#86](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/86)：适配最新抖音版本 
++ V2.18.0
+    * 修复[#72](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/72)：修复斗鱼部分区域获取链接为m3u8的问题  
++ V2.17.0
+    * 修复[#69](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/69)：修复斗鱼部分直播间不能录播的问题  
 + V2.16.0
     * 修复[#67](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/issues/67)：使抖音直播录制支持cookie(尚未测试仅移动端限定直播)
 + V2.15.0

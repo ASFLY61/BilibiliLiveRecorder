@@ -14,8 +14,9 @@ Go go go, Bilibili Pikachu!
 ![CI](https://github.com/nICEnnnnnnnLee/BilibiliLiveRecorder/workflows/CI/badge.svg)
 ![Release 下载总量](https://img.shields.io/github/downloads/nICEnnnnnnnLee/BilibiliLiveRecorder/total.svg?style=flat-square)
 
-#### 支持Bilibili/Acfun/Douyu/Huya/Kuaishou/Huajiao/Zhanqi/YY 直播录制  
-[<h4>Instruction For Developers</h4>](/DOC.md)
+#### 支持Acfun/Bilibili/Douyu/Douyin/Huya/Kuaishou/Taobao/Huajiao/Zhanqi/YY 直播录制  
+
+  <h4><a href="/DOC.md">Instruction For Developers</a></h4>
 
 
 ## :smile:作者的话
@@ -25,7 +26,10 @@ Go go go, Bilibili Pikachu!
 ## :smile:使用方法
 + 程序调用时传入参数即可(顺序可变)  
     `java -Dfile.encoding=utf-8 -jar BiliLiveRecorder.jar "debug=false&check=false&delete=false&liver=douyu&id=233233&qn=0&retry=5"`  
-+ 各参数意义  
+
+<details>
+<summary>各参数意义 </summary>
+
 
 | Key  | 必选 | 释义 | 
 | ------------- | ------------- | ------------- |  
@@ -49,6 +53,8 @@ Go go go, Bilibili Pikachu!
 | splitAVHeaderTags  | 否 | 校准文件时是否分割a/v header Tag时。默认与splitScriptTags一致 |  
 | maxAudioHeaderSize  | 否 | 当Audio tag的data size小于该值时，认为是audio header。默认`10` | 
 | maxVideoHeaderSize  | 否 | 当Video tag的data size小于该值时，认为是video header。默认`60`  | 
+| contentFramesToSkip  | 否 | 校验时，跳过前n个内容帧(即不是script、audio header、video header的帧)。默认`0`  | 
+| maxPeriodBetween2Frame  | 否 | 在前10帧里，初始为0，后续如果某帧相比前一帧间隔过大，则选取该帧时间戳作为初始时间戳。默认`5000`，单位`ms`  | 
 | fileName  | 否 | 文件命名规则，默认`{name}-{shortId} 的{liver}直播{startTime}-{seq}` | 
 | timeFormat  | 否 | 文件命名中{startTime}和{endTime}的格式，默认`yyyy-MM-dd HH.mm` | 
 | saveFolder  | 否 | 源文件保存路径 | 
@@ -59,20 +65,27 @@ Go go go, Bilibili Pikachu!
 | retryAfterMinutes  | 否 | 当目标不在直播时，每次获取直播间信息的时间间隔，单位分钟。默认`5.0` | 
 | failRetryAfterMinutes  | 否 | 当连接出现异常时，下次尝试录制的时间间隔，单位分钟。默认`1.0` | 
 | plugin  | 否 | 插件功能，允许用户自定义某些操作。默认false |  
+</details>
 
-+ 各直播源解析情况  
+<details>
+<summary>各直播源解析情况 </summary>  
+
 
 | liver  | 最后测试时间 | 备注 | 
 | ------------- | ------------- | ------------- | 
-| douyu     | 2021/11/14 | `flv`清晰度可多选，但部分高清需要cookie | 
-| kuaishou  | 2021/11/14 | `flv`清晰度可多选，必须要cookie(可以不登录，只需要过了拖拽验证即可) | 
-| douyin    | 2021/11/14 | `flv`清晰度可多选，必须要cookie(可以不登录，只需要过了拖拽验证即可。没有测试移动端限定独播)。id为`https://live.douyin.com/1234567`后面的那串数字，也可以直接输入短网址类型`https://v.douyin.com/xxxx` |   
-| huya      | 2021/11/14 | `flv`清晰度可多选，可不需要cookie。部分视频时间戳校正后声音会变形，ffmpeg处理后正常 | 
-| acfun     | 2021/11/14 | `flv`清晰度可多选，可不需要cookie | 
-| bili      | 2021/11/14 | `flv`清晰度可多选，可不需要cookie | 
+| bili      | 2024/12/02 | `flv`清晰度可多选，可不需要cookie | 
+| douyu     | 2024/12/02 | `flv`清晰度可多选，但部分高清需要cookie | 
+| kuaishou  | 2024/12/02 | `flv`清晰度可多选，必须要cookie(可以不登录，只需要过了拖拽验证即可) | 
+| douyin    | 2024/12/02 | `flv`清晰度可多选，可不需要cookie。id为`https://live.douyin.com/1234567`后面的那串数字 |   
+| douyin2   | 2024/12/02 | 抖音的另一种解析方式，前者失败后可以尝试。`flv`清晰度可多选，必须要cookie(可以不登录，只需要过了拖拽验证即可)。id为`https://live.douyin.com/1234567`后面的那串数字，也可以直接输入短网址类型`https://v.douyin.com/xxxx` |   
+| huya      | 2024/12/02 | `flv`清晰度可多选，可不需要cookie。只接受数字id，非数字的需要打开网页寻找（热度值左边）。**一起看版块会在几分钟之后断掉** | 
+| huya2     | 2024/12/02 | 虎牙的另一种解析方式，只接受数字id，非数字的需要打开网页寻找（热度值左边）。`flv`清晰度可多选，可不需要cookie。**一起看版块会在几分钟之后断掉** | 
+| taobao    | 2023/09/17 | `flv`清晰度可多选，必须要cookie(先试一试不登录)。id建议首次使用类似`https://m.tb.cn/xxxx`的直播或者回访的分享链接，这时会输出回放m3u8链接和可用id，之后建议一直使用该id。当然，建议是使用相关m3u8下载器下载回放，而不是直接录制。  | 
+| acfun     | 2023/02/22 | `flv`清晰度可多选，可不需要cookie | 
+| yy        | 2022/10/09 | `flv`清晰度可多选，必须要cookie(可以不登录，只需要过了拖拽验证即可) | 
 | zhanqi    | 2019/06/30 | `flv`清晰度可多选，可不需要cookie | 
-| yy        | 2019/06/15 | `flv`只支持默认清晰度 | 
 | huajiao   | 2019/06/02 | `flv`只支持默认清晰度(似乎只有一种清晰度) | 
+</details>
 
 <details>
 <summary>关于json配置</summary>
@@ -110,7 +123,7 @@ Go go go, Bilibili Pikachu!
 </details>
 
 <details>
-<summary>校正某FLV文件的时间戳</summary>
+<summary>校正某FLV文件的时间戳、分割solo/PK视频</summary>
 
 
 + `java -Dfile.encoding=utf-8 -cp BiliLiveRecorder.jar nicelee.bilibili.live.check.FlvCheckerWithBufferEx "flv=源文件路径&debug=false&splitScripts=true&splitAVHeader=true&saveFolder=保存的文件夹路径"`
@@ -121,6 +134,8 @@ Go go go, Bilibili Pikachu!
 | debug  | 否 | debug模式,输出更多信息。默认true |  
 | splitScripts  | 否 | 当出现多个Script tag时，是否分割文件。默认false |  
 | splitAVHeaders  | 否 | 当出现多个a/v header时，是否分割文件。默认与splitScripts一致 |  
+| contentFramesToSkip  | 否 | 校验时，跳过前n个内容帧(即不是script、audio header、video header的帧)。默认`0`  | 
+| maxPeriodBetween2Frame  | 否 | 在前10帧里，初始为0，后续如果某帧相比前一帧间隔过大，则选取该帧时间戳作为初始时间戳。默认`5000`，单位`ms`  | 
 | saveFolder  | 否 | 校准时间戳后的保存目录。默认与源文件相同目录 |  
 | deleteOnchecked  | 否 | 校准后是否删除源文件，默认false |  
 | maxAudioHeaderSize  | 否 | 当Audio tag的data size小于该值时，认为是audio header。默认`10` | 
@@ -134,6 +149,38 @@ Go go go, Bilibili Pikachu!
 </details>     	
 
 <details>
+<summary>解决视频开始时花屏的问题</summary>
+
+
+尝试`contentFramesToSkip=1`甚至更高。  
+校验时，会跳过前`contentFramesToSkip`个内容帧(即不是script、audio header、video header的帧)。  
+可能需要配合参数`maxAudioHeaderSize`、`maxVideoHeaderSize`使用。  
+</details>  
+
+<details>
+<summary>解决视频分割成多个文件后，分辨率不恰当的问题</summary>
+
+
+主播单人直播和PK的分辨率不一样，使用`splitScripts=true&splitAVHeaders=true/false`可能出现很多只有`KB`大小的视频，以及大小正常的视频。
+视频内容都在大小正常的视频里。  
+但是，某些大小正常的视频可能只有声音，或者分辨率不对。需要把该视频和前面的视频merge。  
+```
+举例：  
+...
+kuaishou.xxx-abcd 的kuaishou直播2022-12-03 12.08-0-checked4.flv        76KB
+kuaishou.xxx-abcd 的kuaishou直播2022-12-03 12.08-0-checked5.flv        81KB
+kuaishou.xxx-abcd 的kuaishou直播2022-12-03 12.08-0-checked6.flv        473MB
+
+假设checked6.flv分别率不对，可以merge checked5.flv + checked6.flv -> checked5.merge.flv
+假设checked5.merge.flv分别率仍然不对，可以merge checked4.flv + checked5.merge.flv -> checked4.merge.flv
+以此类推。  
+如果还是不行，可以找到以前成功过的相同分辨率的几十KB的FLV作为头部，尝试与该视频merge。
+```
++ `java -Dfile.encoding=utf-8 -cp BiliLiveRecorder.jar nicelee.bilibili.live.check.FlvMerger "flv路径1" "flv路径2"`  
+
+</details>  
+
+<details>
 <summary>加载cookies(适用于高清晰度录制)</summary>
 
 
@@ -144,7 +191,7 @@ dy_did=xxx; acf_did=xxx; acf_auth=xxx; ...
 ```
 + 如何获取cookie(以斗鱼举例)：  
     + 打开浏览器，进入斗鱼直播  
-    + 登录账号  
+    + 登录账号(某些liver可以跳过)  
     + 进入一个热度较高的直播间，选择清晰度： 蓝光10M(保险操作，如果清晰度不够试一试)   
     + 按F12键  
     + 过滤网址`www.douyu.com`  
@@ -271,11 +318,12 @@ or传入参数： qnPri=蓝光4M>蓝光
 ## :smile:第三方库使用声明  
 + 使用[JSON.org](https://github.com/stleary/JSON-java)库做简单的Json解析[![](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/stleary/JSON-java/blob/master/LICENSE)
 + 使用[Crypto-js](https://github.com/brix/crypto-js)仿浏览器生成斗鱼直播录制token[![](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/brix/crypto-js/blob/develop/LICENSE) 
-+ 虎牙对得到的直播流地址做进一步参数处理参考了[wbt5/real-url](https://github.com/wbt5/real-url/blob/df183eee17022d558cfc2aec221dfe632e360b13/huya.py#L11-L28)  
++ 参考[HuyaSender](https://github.com/xyxyxiaoyan/HuyaSender)解析虎牙[TarsTup](https://github.com/TarsCloud/TarsTup)协议[![](https://img.shields.io/badge/license-Tencent%20Binary%20License-green.svg)](https://tencentdingdang.github.io/dmsdk/licenses/android-wup-sdk/LICENSE.txt) 
++ 参考[biliup/biliup](https://github.com/biliup/biliup/blob/7c703b936b7a79c134a7af45331d71c32de976a7/biliup/plugins/huya.py#L169)修改query参数[![](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/biliup/biliup/blob/7c703b936b7a79c134a7af45331d71c32de976a7/LICENSE)  
 
 ## :smile:LICENSE 
 ```
-Copyright (C) 2019 NiceLee. All Rights Reserved.
+Copyright (C) 2019-2024 NiceLee. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
